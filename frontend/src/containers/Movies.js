@@ -8,6 +8,7 @@ const ALL_MOVIES = gql`
             name
             genre
             year
+            imageUrl
         }
     }
 `
@@ -23,7 +24,7 @@ function DisplayMovies() {
                     name={movie.name}
                     genre={movie.genre}
                     year={movie.year}
-                    image={movie.image} />
+                    image={movie.imageUrl} />
             })
         }
     </div>

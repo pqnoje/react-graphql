@@ -1,59 +1,72 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import { gql, useMutation } from '@apollo/client'
-import { flowRight as compose } from 'lodash'
 
 const ADD_MOVIE = gql`
-    mutation AddMovie($name: String!, $genre: String!, $year: String!){
-        addMovie(name: $name, genre: $genre, year: $year){
+    mutation AddMovie($name: String!, $genre: String!, $year: String!, $imageUrl: String!){
+        addMovie(name: $name, genre: $genre, year: $year, imageUrl: $imageUrl){
             name
             genre
             year
+            imageUrl
         }
     }
 `
 
 function CreateMovie() {
-    let input;
-    const [addMovie, { data, loading, error }] = useMutation(ADD_MOVIE);
+    let name
+    let genre
+    let year
+    let imageUrl
+    const [addMovie, { data, loading, error }] = useMutation(ADD_MOVIE)
 
-    if (loading) return 'Submitting...';
-    if (error) return `Submission error! ${error.message}`;
+    if (loading) return 'Submitting...'
+    if (error) return `Submission error! ${error.message}`
 
     return (
         <div class="addMovie">
             <form onSubmit={e => {
                     e.preventDefault();
-                    let variables = { name: e.target[0].value, genre: e.target[1].value, year: e.target[2].value }
-                    addMovie(variables);
-                    input.value = '';
+                    let movie = { 
+                        variables: {
+                            name: name.value, genre: genre.value, year: year.value, imageUrl: imageUrl.value 
+                        }
+                    }
+                    addMovie(movie);
+                    debugger
                 }}>
                 <label>Name</label>
                 <input
                     ref={node => {
-                        input = node;
+                        name = node
                     }}
                 />
                 <label>Genre</label>
                 <input
                     ref={node => {
-                        input = node;
+                        genre = node
                     }}
                 />
                 <label>Year</label>
                 <input
                     ref={node => {
-                        input = node;
+                        year = node
+                    }}
+                />
+                <label>Image URL</label>
+                <input
+                    ref={node => {
+                        imageUrl = node
                     }}
                 />
                 <button type="submit">Add Movie</button>
             </form>
         </div>
-    );
+    )
 }
 
 class AddMovie extends Component {
     constructor(props) {
-        super(props);
+        super(props)
 
     }
 
@@ -85,11 +98,6 @@ class AddMovie extends Component {
 
     }
 
-    submitMovie = (event) => {
-        event.preventDefault()
-
-    }
-
     render() {
         return <CreateMovie></CreateMovie>
     }
@@ -97,6 +105,6 @@ class AddMovie extends Component {
 
 AddMovie.propTypes = {
 
-};
+}
 
-export default AddMovie;
+export default AddMovie
